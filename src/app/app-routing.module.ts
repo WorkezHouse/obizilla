@@ -1,14 +1,15 @@
 import { provideRouter, Routes } from '@angular/router';
-import { HomeComponent } from './HomeModule/Components/home/home.component';
 import { PlansComponent } from './PlansModule/Components/plans/plans.component';
 import { SettingsComponent } from './SettingsModule/Components/settings/settings.component';
 import { LoginComponent } from './LoginModule/Components/login/login.component';
-import { PainelComponent } from './PainelModule/Components/painel/painel.component';
+import { DashboardComponent } from './DashboardModule/Components/dashboard/dashboard.component';
+import { AnaliticsComponent } from './AnaliticsModule/Components/analitics/analitics.component';
+import { ChatComponent } from './chatModule/components/chat/chat.component';
 
 export const AppRoutes: Routes = [
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'dashboard',
+    component: DashboardComponent,
     children: [
       {
         path: 'plans',
@@ -19,12 +20,12 @@ export const AppRoutes: Routes = [
         component: SettingsComponent
       },
       {
-        path: 'painel',
-        component: PainelComponent
+        path: 'analitics',
+        component: AnaliticsComponent
       },
       {
         path: '',
-        redirectTo: 'plans', // Redireciona para 'plans' por padrão
+        redirectTo: 'plans',
         pathMatch: 'full'
       }
     ]
@@ -32,6 +33,10 @@ export const AppRoutes: Routes = [
   {
     path: 'Login',
     component: LoginComponent
+  },
+  {
+    path: 'chat',
+    component: ChatComponent
   },
   {
     path: '**',

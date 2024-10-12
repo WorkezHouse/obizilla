@@ -1,9 +1,10 @@
+@if (loginLoading) {
+
 <div class="nav">
   <div class="nav-itens">
     <img src="../../../assets/img/Navbar Brand.png" alt="" />
-
     <div class="plans">
-      <p (click)="goToRoute('/home/plans')">Planos</p>
+      <p (click)="goToRoute('/dashboard/plans')">Planos</p>
       <button>Log in</button>
     </div>
   </div>
@@ -15,3 +16,8 @@
 
   </div>
 </div>
+
+}
+@if (!loginLoading) {
+  <app-login-formulario></app-login-formulario>
+}
