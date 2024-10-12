@@ -1,9 +1,9 @@
 import { provideRouter, Routes } from '@angular/router';
 import { PlansComponent } from './PlansModule/Components/plans/plans.component';
 import { SettingsComponent } from './SettingsModule/Components/settings/settings.component';
-import { LoginComponent } from './LoginModule/Components/login/login.component';
+import { login } from './LoginModule/Components/login/login.component';
 import { DashboardComponent } from './DashboardModule/Components/dashboard/dashboard.component';
-import { AnaliticsComponent } from './AnaliticsModule/Components/analitics/analitics.component';
+import { AnalyticsComponent } from './analyticsModule/Components/analytics/analytics.component';
 import { ChatComponent } from './chatModule/components/chat/chat.component';
 
 export const AppRoutes: Routes = [
@@ -20,8 +20,8 @@ export const AppRoutes: Routes = [
         component: SettingsComponent
       },
       {
-        path: 'analitics',
-        component: AnaliticsComponent
+        path: 'analytics',
+        component: AnalyticsComponent
       },
       {
         path: '',
@@ -31,8 +31,8 @@ export const AppRoutes: Routes = [
     ]
   },
   {
-    path: 'Login',
-    component: LoginComponent
+    path: 'login',
+    component: login
   },
   {
     path: 'chat',
@@ -40,7 +40,7 @@ export const AppRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'Login',
+    redirectTo: 'login',
   },
 ];
 

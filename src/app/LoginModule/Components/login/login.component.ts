@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginFormularioComponent } from '../login-formulario/login-formulario.component';
+import { loginFormularioComponent } from '../login-formulario/login-formulario.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,LoginFormularioComponent],
+  imports: [CommonModule,loginFormularioComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class login implements OnInit {
   loginLoading = true;
 
   constructor(private router: Router) {}

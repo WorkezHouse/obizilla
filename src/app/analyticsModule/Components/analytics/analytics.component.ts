@@ -5,13 +5,13 @@ import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-analitics',
+  selector: 'app-analytics',
   standalone: true,
   imports: [NavbarComponent, SidebarComponent, CalendarModule, FormsModule],
-  templateUrl: './analitics.component.html',
-  styleUrls: ['./analitics.component.scss']
+  templateUrl: './analytics.component.html',
+  styleUrls: ['./analytics.component.scss']
 })
-export class AnaliticsComponent implements OnInit {
+export class AnalyticsComponent implements OnInit {
   currentDate?: Date;
 
   ngOnInit(): void {

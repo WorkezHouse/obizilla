@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './login-formulario.component.html',
   styleUrl: './login-formulario.component.scss'
 })
-export class LoginFormularioComponent {
+export class loginFormularioComponent {
 
 }
