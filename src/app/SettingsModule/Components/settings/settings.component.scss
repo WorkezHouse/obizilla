@@ -28,7 +28,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 
@@ -48,20 +48,18 @@
 }
 
 
-.pw-group {
+.toggle-group {
   display: flex;
   height: auto;
   flex-direction: column;
   color: #BBBB;
 
-  .pw-holder {
+  .toggle-holder {
     display: flex;
-    margin-bottom: 6px;
 
   }
 
-  #reset-pw {
-    margin-top: 12px;
+  .toggle-change {
     display: none;
     gap: 6px;
     flex-direction: column;
