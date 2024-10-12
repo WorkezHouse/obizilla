@@ -7,7 +7,7 @@
     <div class="container-right">
       <div class="header-container">
         <div class="header">
-          <p>Analytics</p>
+          <h3>Analytics</h3>
           <p-calendar [(ngModel)]="currentDate" [iconDisplay]="'input'" [showIcon]="true" inputId="templatedisplay">
             <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
               <i class="pi pi-clock pointer-events-none" (click)="clickCallBack($event)"></i>
@@ -15,23 +15,34 @@
           </p-calendar>
         </div>
 
-        <div class="card">
-          <div class="card-text">
-            <p>Total em vendas:</p>
-            <h4>R$ 2.400,00</h4>
-          </div>
-          <div class="card-text">
-            <p>Revenue Share</p>
-            <h4>R$ 1.690,00/mês</h4>
-          </div>
-          <div class="card-text">
-            <p>Assinaturas ativas</p>
-            <h4>40</h4>
+
+        <!-- ANALYTICS CARD -->
+        <div class="cardHolder">
+          <div class="card">
+            <div class="analyticsInfoHolder">
+              <p>Total em vendas:</p>
+              <h4>R$ 2.400,0</h4>
+            </div>
+            <div class="analyticsInfoHolder">
+              <p>Revenue Share</p>
+              <h4>R$ 1.690,00<span class="monthSpan">/mês</span></h4>
+            </div>
+            <div class="analyticsInfoHolder">
+              <p>Assinaturas ativas</p>
+              <h4>40</h4>
+            </div>
           </div>
         </div>
-        <p>Links de Divulgação:</p>
-        <img src="../../../../assets/img/Frame 10.png" alt="">
-        <p></p>
+
+        <!--  LINKS DE DIVULGAÇÃO-->
+
+        <section class="shareLinks">
+          <h3>Links de Divulgação:</h3>
+
+          <!--PERFECTPAY BUTTON-->
+
+          <button> <img src="../../../../assets/icons/perfectpay.png"> PerfectPay </button>
+        </section>
       </div>
     </div>
   </div>

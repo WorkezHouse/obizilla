@@ -1,4 +1,3 @@
-
 .wkz-dash {
   height: 100vh;
   width: 100vw;
@@ -7,11 +6,15 @@
   flex-direction: column;
 }
 
+* {
+  margin: 0px;
+}
+
 .container {
   height: 100%;
 }
 
-.container-right{
+.container-right {
   width: 100%;
   height: 100%;
   background-color: rgb(0, 0, 0);
@@ -19,10 +22,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-flex-direction: column;
+  flex-direction: column;
 }
 
-.container-settings{
+.container-settings {
   width: 340px;
   color: white;
   display: flex;
@@ -33,90 +36,173 @@ flex-direction: column;
 
 /* Estilo para o input do calendário */
 ::ng-deep .p-inputtext {
-  color: #ffffff; /* Cor do texto */
-  background: linear-gradient(to bottom, black, rgba(255, 255, 255, 0.245));  border: 1px solid #ccc; /* Borda */
-  border-radius: 5px; /* Bordas arredondadas */
+  color: #ffffff;
+  /* Cor do texto */
+  background: linear-gradient(to bottom, black, rgba(255, 255, 255, 0.245));
+  border: 1px solid #ccc;
+  /* Borda */
+  border-radius: 5px;
+  /* Bordas arredondadas */
 }
 
-.header-container{
+.header-container {
   width: 100%;
   justify-content: space-between;
   align-items: start;
   display: flex;
   color: white;
-  padding-left: 200px;
-  padding-right: 200px;
+  max-width: 800px;
   flex-direction: column;
-  gap: 10px
-  ;
+  gap: 10px;
 }
-.card{
+
+.cardHolder {
   width: 100%;
-  background-color: rgb(0, 0, 0);
-  border-top: 1px solid #a3a3a3;
-  border-left: 1px solid #161C3D;
-  border-right: 1px solid #161C3D;
-  border-bottom: 1px solid #161C3D;
+  padding: 1px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #FFF 0%, #3A4BA4 100%);
+
+}
+
+.card {
+  border-radius: 12px;
+  padding: 36px 30px;
+  width: 100%;
+  background: radial-gradient(81.08% 139.46% at 47.43% 100%, rgba(57, 74, 163, 0.04) 0%, rgba(0, 255, 240, 0.00) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.01) 100%), var(--black-0, #000);
+
   height: 150px;
   display: flex;
-  border-radius: 25px;
   justify-content: space-between;
   align-items: center;
 }
-.header{
+
+.header {
   width: 100%;
   display: flex;
   justify-content: space-between;
-align-items: center;
-}
-.card-text{
-  padding: 24px 28px;
-display: flex;
-align-items: start;
-justify-content: center;
-flex-direction: column;
-gap: 10px
-;
-p{
-  margin: 0px;
-
-}
-h4{
-  margin: 0px;
-}
+  align-items: center;
 }
 
+
+.analyticsInfoHolder {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  p {
+    color: #BBB;
+    font-size: 14px;
+
+
+  }
+
+  h4 {
+
+    font-size: 24px;
+    font-weight: 500;
+
+    .monthSpan {
+      position: relative;
+      font-size: 14px;
+    }
+  }
+}
+
+
+.shareLinks {
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+
+
+  button {
+    width: fit-content;
+    display: flex;
+    justify-content: start;
+    gap: 6px;
+    cursor: pointer;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid #545454;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+    transition: all ease-in 0.5s;
+    background: radial-gradient(90.38% 72.18% at 50.19% 21.93%, rgba(217, 217, 217, 0.00) 0%, rgba(255, 255, 255, 0.20) 100%);
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+}
 
 ::ng-deep .p-calendar .p-datepicker {
-  background-color: #333; /* Cor de fundo do datepicker */
-  border: 1px solid #444; /* Cor da borda do datepicker */
+  background-color: #333;
+  /* Cor de fundo do datepicker */
+  border: 1px solid #444;
+  /* Cor da borda do datepicker */
 }
 
 ::ng-deep .p-calendar .p-datepicker-calendar td {
-  color: #fff; /* Cor do texto dos dias */
+  color: #fff;
+  /* Cor do texto dos dias */
 }
 
 ::ng-deep .p-calendar .p-datepicker-header {
-  background-color: #8e8e8e; /* Cor de fundo do cabeçalho */
-  color: #fff; /* Cor do texto do cabeçalho */
+  background-color: #8e8e8e;
+  /* Cor de fundo do cabeçalho */
+  color: #fff;
+  /* Cor do texto do cabeçalho */
+}
+
+
+@media screen and (max-width: 1100px) {
+
+  .header-container {
+
+    max-width: 100%;
+    padding: 0px 36px;
+
+  }
+
+
+  .cardHolder {
+    width: 100%;
+
+  }
+
 }
 
 @media screen and (max-width: 768px) {
   .container {
     flex-direction: column;
   }
-  .header-container{
+
+  .header-container {
     margin-top: 80px;
-    padding: 10px;
+    padding: 16px 20px;
     width: 100%;
   }
-  .card{
+
+  .card {
     width: 100%;
     flex-direction: column;
     height: 100%;
     border: 1px solid #1c31a2;
+    gap: 26px;
+
+    .analyticsInfoHolder {
+
+      display: flex;
+      align-items: center;
+
+    }
   }
-  .header{
+
+  .header {
     flex-direction: column;
   }
 
