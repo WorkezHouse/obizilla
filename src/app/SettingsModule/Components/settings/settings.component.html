@@ -1,25 +1,41 @@
-<app-navbar></app-navbar>
-<div class="container">
-    <app-sidebar></app-sidebar>
+<section class="wkz-dash">
+  <app-navbar></app-navbar>
+
+  <div class="container">
+
+    <div class="sidebar">
+      <app-sidebar></app-sidebar>
+    </div>
     <div class="container-right">
       <div class="container-settings">
-        <p style="color:white; font-weight: 500;">Configurações</p>
-        <div class="form-group"style="color:white">
-            <label for="username"style="color:white">Nome</label>
-            <input id="username" placeholder="Babizyla123#" type="text" class="form-control">
+        <h3 style="color:white; font-weight: 500;">Configurações</h3>
+        <div class="form-group" style="color:white">
+          <label for="username" style="color:white">Nome</label>
+          <input id="username" placeholder="Baby Zila" type="text" class="form-control">
         </div>
-        <div class="form-group"style="color:white">
-          <label for="username"style="color:white">Email</label>
-          <input id="username" type="text" placeholder="Babizyla@gmail.com" class="form-control">
-      </div>
-      <div class="form-group"style="color:white">
-        <label for="username"style="color:white">Senha</label>
-        <input id="username" type="password"placeholder="Senha123#"  class="form-control">
-    </div>
-    <div>
-      <button class="btn btn-primary">Salvar</button>
-    </div>
+        <div class="form-group" style="color:white">
+          <label for="email" style="color:white">Email</label>
+          <input id="email" type="text" placeholder="baby@zilla.ia" class="form-control">
+        </div>
+        <div class="form-grou" style="color:white">
+          <label for="password" style="color:white">Senha</label>
+
+          <div class="pw-group">
+            <div class="pw-holder" #pwHolder>
+              <p>********* </p> <span id="changePw" (click)="changePwActive()">Alterar</span>
+            </div>
+
+            <div id="reset-pw" #resetPw>
+              <input id="currentPw" type="text" placeholder="Senha Atual" class="form-control">
+              <input id="newPw" type="text" placeholder="Nova Senha" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-primary">Salvar</button>
+        </div>
       </div>
 
     </div>
-</div>
+  </div>
+</section>
