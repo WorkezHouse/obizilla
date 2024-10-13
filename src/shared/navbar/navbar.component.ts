@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ElementRef, Renderer2 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../Service/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,10 @@ import { filter } from 'rxjs/operators';
 })
 export class NavbarComponent implements OnInit, AfterViewInit {
 
-  constructor(private route: Router, private renderer: Renderer2, private el: ElementRef) { }
+  constructor(private route: Router,
+    private renderer: Renderer2,
+     private el: ElementRef,
+     private authService: AuthService) { }
 
   ngOnInit() {
     this.route.events
@@ -19,7 +23,11 @@ export class NavbarComponent implements OnInit, AfterViewInit {
         this.toggleDashboardClass(event.urlAfterRedirects);
       });
   }
-
+  async logout() {
+    await this.authService.logout();
+    this.route.navigate(['/login']);
+    console.log('Logout bem-sucedido!');
+  }
   ngAfterViewInit() {
     // Initial check in case the route is already on "dashboard"
     this.toggleDashboardClass(this.route.url);

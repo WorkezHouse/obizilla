@@ -6,16 +6,18 @@
     <p style="color: white; font-weight: 500; font-size: 30px;">Bem Vindo!</p>
     <div class="form-group" style="color:white">
       <div class="input-container">
-        <input id="email" placeholder=" " type="email" class="form-control">
+        <input id="email" placeholder=" "[(ngModel)]="email" type="email" class="form-control">
         <label for="email">Email*</label>
       </div>
-      
+
       <div class="input-container">
-        <input id="password" placeholder=" " type="password" class="form-control">
+        <input id="password"[(ngModel)]="password" placeholder=" " type="password" class="form-control">
         <label for="password">Senha*</label>
       </div>
-      
-      <button class="btn btn-primary">Continue</button>
+
+      <button class="btn btn-primary" (click)="login()">Continue</button>
+      <!-- <button (click)="login()">Login</button> -->
+
     </div>
     <p>Não possui uma conta?</p>
     <p style="color: #0022FF;">Registre-se</p>

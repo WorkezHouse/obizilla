@@ -14,7 +14,6 @@
         <h3 style="font-weight: 600; font-size: 18px; color: white;">Planos</h3>
         <div class="flex-plans">
 
-
           <div class="container-planos">
             <div class="container-planos-text">
 
@@ -43,14 +42,14 @@
                 <p>mensalmente</p>
 
               </div>
-              <button class="plansSubscribe pSub-white">Assinar</button>
+              <button class="plansSubscribe pSub-white"(click)="subscribeToPlan(plans[0].name, plans[0].name)">Assinar</button>
 
             </div>
           </div>
 
 
 
-          <div class="container-planos planoDestaque">
+          <div class="container-planos planoDestaque" >
             <div class="container-planos-text ">
               <div class="planos-maininfo">
 
@@ -82,7 +81,7 @@
                 <p>mensalmente</p>
 
               </div>
-              <button class="plansSubscribe pSub-highlight">Assinar</button>
+              <button class="plansSubscribe pSub-highlight"(click)="subscribeToPlan(plans[1].name, plans[1].name)">Assinar</button>
 
             </div>
           </div>

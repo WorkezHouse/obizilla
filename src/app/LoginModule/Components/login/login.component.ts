@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { loginFormularioComponent } from '../login-formulario/login-formulario.component';
+import { LoginFormularioComponent } from '../login-formulario/login-formulario.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,loginFormularioComponent],
+  imports: [CommonModule,LoginFormularioComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

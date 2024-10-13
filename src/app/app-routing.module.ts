@@ -5,11 +5,13 @@ import { login } from './LoginModule/Components/login/login.component';
 import { DashboardComponent } from './DashboardModule/Components/dashboard/dashboard.component';
 import { AnalyticsComponent } from './analyticsModule/Components/analytics/analytics.component';
 import { ChatComponent } from './chatModule/components/chat/chat.component';
+import { AuthGuard } from '../shared/Service/authguard.service';
 
 export const AppRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'plans',
@@ -36,7 +38,8 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'chat',
-    component: ChatComponent
+    component: ChatComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
@@ -47,30 +50,3 @@ export const AppRoutes: Routes = [
 export const appRoutingProviders = [
   provideRouter(AppRoutes)
 ];
-
-// import { Injectable } from '@angular/core';
-// import { CanActivate, Router } from '@angular/router';
-// import { AuthService } from './auth.service';
-
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class AuthGuard implements CanActivate {
-//   constructor(private authService: AuthService, private router: Router) {}
-
-//   async canActivate(): Promise<boolean> {
-//     const session = await this.authService.isAuthenticated();
-//     if (!session) {
-//       this.router.navigate(['/login']);
-//       return false;
-//     }
-//     return true;
-//   }
-// }
-
-// // No seu routes array:
-// {
-//   path: 'protected',
-//   component: ProtectedComponent,
-//   canActivate: [AuthGuard]
-// }
