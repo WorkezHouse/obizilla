@@ -3,11 +3,12 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { SidebarComponent } from '../../../../shared/sidebar/sidebar.component';
 import { AuthService } from '../../../../shared/Service/auth.service';
 import { FormsModule } from '@angular/forms';
+import { ToastComponent } from '../../../../shared/toast/toast.component';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [NavbarComponent, SidebarComponent, FormsModule],
+  imports: [NavbarComponent, SidebarComponent, FormsModule, ToastComponent],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
@@ -16,6 +17,7 @@ export class SettingsComponent implements AfterViewInit {
   newEmail: string = '';
   currentPassword: string = '';
   newPassword: string = '';
+  @ViewChild(ToastComponent) toast!: ToastComponent;
 
   originalName: string = ''; // Armazena o nome original
   originalEmail: string = ''; // Armazena o email original
@@ -38,9 +40,11 @@ export class SettingsComponent implements AfterViewInit {
         this.originalName = user.full_name ?? ''; // Fornece um valor padrão se user.name for undefined
         this.originalEmail = user.email ?? ''; // Fornece um valor padrão se user.email for undefined
       } else {
+        this.showToast('Erro ao carregar os dados do usuário logado', 'error');
         console.error('Erro ao carregar os dados do usuário logado');
       }
     }).catch(error => {
+      this.showToast('Erro ao buscar usuário', 'error');
       console.error('Erro ao buscar usuário:', error);
     });
   }
@@ -51,26 +55,24 @@ export class SettingsComponent implements AfterViewInit {
     console.log('resetPw:', this.resetPw);
   }
 
-  // Funções de alteração de visualização de elementos
-  changeMailActive() {
-    if (this.mailHolder && this.changeMail) {
-      this.mailHolder.nativeElement.style.display = 'none';
-      this.changeMail.nativeElement.style.display = 'flex';
+  // Função genérica de alteração de visualização de elementos
+  toggleElementVisibility(holder: ElementRef, changer: ElementRef, show: boolean) {
+    if (holder && changer) {
+      holder.nativeElement.style.display = show ? 'none' : 'flex';
+      changer.nativeElement.style.display = show ? 'flex' : 'none';
     }
+  }
+
+  changeMailActive() {
+    this.toggleElementVisibility(this.mailHolder, this.changeMail, true);
   }
 
   changeNameActive() {
-    if (this.nameHolder && this.changeName) {
-      this.nameHolder.nativeElement.style.display = 'none';
-      this.changeName.nativeElement.style.display = 'flex';
-    }
+    this.toggleElementVisibility(this.nameHolder, this.changeName, true);
   }
 
   changePwActive() {
-    if (this.pwHolder && this.resetPw) {
-      this.pwHolder.nativeElement.style.display = 'none';
-      this.resetPw.nativeElement.style.display = 'flex';
-    }
+    this.toggleElementVisibility(this.pwHolder, this.resetPw, true);
   }
 
   // Função para salvar alterações
@@ -80,12 +82,14 @@ export class SettingsComponent implements AfterViewInit {
       if (this.newName !== this.originalName) {
         await this.authService.updateUserName(this.newName);
         this.originalName = this.newName; // Atualiza o valor original
+        this.toggleElementVisibility(this.nameHolder, this.changeName, false);
       }
 
       // Verifica se o email foi alterado
       if (this.newEmail !== this.originalEmail) {
         await this.authService.updateUserEmail(this.newEmail);
         this.originalEmail = this.newEmail; // Atualiza o valor original
+        this.toggleElementVisibility(this.mailHolder, this.changeMail, false);
       }
 
       // Verifica se a senha foi alterada
@@ -96,14 +100,24 @@ export class SettingsComponent implements AfterViewInit {
           // Limpar campos de senha após a alteração
           this.currentPassword = '';
           this.newPassword = '';
+          this.toggleElementVisibility(this.pwHolder, this.resetPw, false);
         } else {
+          this.showToast('Senha atual inválida', 'error');
           console.error('Senha atual inválida');
         }
       }
-
+      this.showToast('Alterações salvas com sucesso!', 'success');
       console.log('Alterações salvas com sucesso!');
     } catch (error) {
+      this.showToast('Erro ao salvar alterações', 'error');
       console.error('Erro ao salvar alterações:', error);
     }
+  }
+
+  showToast(message: string, type: 'success' | 'error' | 'info') {
+    this.toast.message = message;
+    this.toast.type = type;
+    this.toast.show = true;
+    setTimeout(() => this.toast.hideToast(), 3000);
   }
 }

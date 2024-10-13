@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { SidebarComponent } from '../../../../shared/sidebar/sidebar.component';
 import { AuthService } from '../../../../shared/Service/auth.service'; // Importe o AuthService para gerenciar o usuário
 import { NgIf } from '@angular/common';
+import { ToastComponent } from '../../../../shared/toast/toast.component';
 
 @Component({
   selector: 'app-plans',
   standalone: true,
-  imports: [NavbarComponent, SidebarComponent, NgIf],
+  imports: [NavbarComponent, SidebarComponent, NgIf,ToastComponent],
   templateUrl: './plans.component.html',
   styleUrls: ['./plans.component.scss']
 })
 export class PlansComponent implements OnInit {
   sidebarVisible: boolean = false;
+  @ViewChild(ToastComponent) toast!: ToastComponent;
 
   // Definir os planos como um array de objetos
   plans = [
@@ -44,6 +46,7 @@ export class PlansComponent implements OnInit {
     try {
       const { data: plansData, error } = await this.authService.getPlans();
       if (error) {
+        this.showToast('Erro ao buscar planos', 'error');
         console.error('Erro ao buscar planos:', error);
         return;
       }
@@ -56,10 +59,12 @@ export class PlansComponent implements OnInit {
           this.plans[0].planId = basicPlan.id;
           this.plans[1].planId = goldPlan.id;
         } else {
+          this.showToast('Planos não encontrados', 'error');
           console.error('Planos não encontrados');
         }
       }
     } catch (error) {
+      this.showToast('Erro ao carregar os planos', 'error');
       console.error('Erro ao carregar os planos:', error);
     }
   }
@@ -73,6 +78,7 @@ export class PlansComponent implements OnInit {
         const planData = await this.authService.getPlanBasic(planName);
 
         if (!planData) {
+          this.showToast('Erro ao buscar o ID do plano', 'error');
           console.error('Erro ao buscar o ID do plano');
           return;
         }
@@ -90,6 +96,7 @@ export class PlansComponent implements OnInit {
       }
 
       if (!planId) {
+        this.showToast('Erro: ID do plano não encontrado', 'error');
         console.error('Erro: ID do plano não encontrado');
         return;
       }
@@ -98,6 +105,7 @@ export class PlansComponent implements OnInit {
       const user = await this.authService.getLoggedInUser();
 
       if (!user || !user.id) {
+        this.showToast('Erro: Usuário não encontrado', 'error');
         console.error('Erro: Usuário não encontrado');
         return;
       }
@@ -107,13 +115,20 @@ export class PlansComponent implements OnInit {
       if (!updateSuccess) {
         console.error('Erro ao atualizar o plano do usuário.');
       } else {
+        this.showToast('Plano do usuário atualizado com sucesso!', 'success');
         console.log('Plano do usuário atualizado com sucesso!');
       }
     } catch (error) {
+      this.showToast('Erro ao inscrever no plano'+ error, 'error');
       console.error('Erro ao inscrever no plano:', error);
     }
   }
 
 
-
+  showToast(message: string, type: 'success' | 'error' | 'info') {
+    this.toast.message = message;
+    this.toast.type = type;
+    this.toast.show = true;
+    setTimeout(() => this.toast.hideToast(), 3000);
+  }
 }

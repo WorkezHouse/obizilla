@@ -1,49 +1,65 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../../../shared/Service/auth.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastComponent } from '../../../../shared/toast/toast.component';
 
 @Component({
   selector: 'app-login-formulario',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ToastComponent],
   templateUrl: './login-formulario.component.html',
-  styleUrls: ['./login-formulario.component.scss'] // Corrigi aqui
+  styleUrls: ['./login-formulario.component.scss']
 })
 export class LoginFormularioComponent implements OnInit {
   email: string = '';
   password: string = '';
+  register: boolean = false;
+  full_name: string = '';
+  @ViewChild(ToastComponent) toast!: ToastComponent;
 
-  constructor(private authService: AuthService,private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   async ngOnInit() {}
-
-  // Chama o método de login do serviço de autenticação
   async login() {
     const data = await this.authService.login(this.email, this.password);
     if (data) {
       console.log('Login bem-sucedido:', data);
-      this.router.navigate(['/chat']);
-
+      this.showToast('Login bem-sucedido!', 'success');
+      setTimeout(() => {
+        this.router.navigate(['/chat']);
+      }, 1000); // 5 segundos
     } else {
       console.error('Erro no login.');
+      this.showToast('Erro no login.', 'error');
     }
-
   }
 
-  // Chama o método de registro do serviço de autenticação
   async signUp() {
-    const data = await this.authService.signUp(this.email, this.password);
+    const data = await this.authService.signUp(this.email, this.password, this.full_name);
     if (data) {
       console.log('Registro bem-sucedido:', data);
+      this.showToast('Registro bem-sucedido!', 'success');
     } else {
       console.error('Erro no registro.');
+      this.showToast('Erro no registro.', 'error');
     }
   }
 
-  // Chama o método de logout do serviço de autenticação
   async logout() {
     await this.authService.logout();
     console.log('Logout bem-sucedido!');
+    this.showToast('Logout bem-sucedido!', 'info');
+  }
+
+  toggleRegister() {
+    this.register = !this.register;
+  }
+
+  showToast(message: string, type: 'success' | 'error' | 'info') {
+    this.toast.message = message;
+    this.toast.type = type;
+    this.toast.show = true;
+    setTimeout(() => this.toast.hideToast(), 3000);
   }
 }
