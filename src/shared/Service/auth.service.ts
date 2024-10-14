@@ -44,7 +44,20 @@ export class AuthService {
         return null;
       }
 
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      let passwordMatch = false;
+
+      // Tentar comparar a senha como se estivesse criptografada
+      try {
+        passwordMatch = await bcrypt.compare(password, user.password);
+      } catch (bcryptError) {
+        console.warn('Erro ao tentar descriptografar a senha, tentando comparação direta', bcryptError);
+      }
+
+      // Se a comparação criptografada falhar, fazer uma comparação direta
+      if (!passwordMatch) {
+        passwordMatch = password === user.password;
+      }
+
       if (!passwordMatch) {
         console.error('Erro: Senha incorreta');
         return null;
