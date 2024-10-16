@@ -76,7 +76,44 @@ export class AuthService {
       return null;
     }
   }
+  async getUserById(userId: string): Promise<User | null> {
+    try {
+      const { data: user, error } = await supabase
+        .from('users')
+        .select('id, email, full_name')
+        .eq('id', userId)
+        .single();
 
+      if (error || !user) {
+        console.error('Erro ao buscar usuário por ID:', error);
+        return null;
+      }
+
+      return user as User;
+    } catch (error) {
+      console.error('Erro ao buscar usuário por ID:', error);
+      return null;
+    }
+  }
+
+
+  async getAllUsers(): Promise<User[] | null> {
+    try {
+      const { data: users, error } = await supabase
+        .from('users')
+        .select('id, email, full_name');
+
+      if (error || !users) {
+        console.error('Erro ao buscar todos os usuários:', error);
+        return null;
+      }
+
+      return users as User[];
+    } catch (error) {
+      console.error('Erro ao buscar todos os usuários:', error);
+      return null;
+    }
+  }
   // Método de registro (signUp)
   async signUp(email: string, password: string, fullName?: string, planName?: string): Promise<{ message: string } | null> {
     try {
