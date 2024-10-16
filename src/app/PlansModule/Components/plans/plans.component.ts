@@ -16,112 +16,12 @@ export class PlansComponent implements OnInit {
   sidebarVisible: boolean = false;
   @ViewChild(ToastComponent) toast!: ToastComponent;
 
-  // Definir os planos como um array de objetos
-  plans = [
-    {
-      name: 'Basic',
-      description: 'Tudo o que você precisa para começar com uma IA poderosa e sem censura.',
-      features: ['Interações 100% anônimas', 'Respostas poderosas sem censura', '10 prompts / dia'],
-      price: 10,
-      planId: '' // Inicialmente vazio, será preenchido com o ID correto
-    },
-    {
-      name: 'Gold',
-      description: 'Ideal para usuários frequentes que precisam de mais dados e flexibilidade.',
-      features: ['100 prompts / dia', 'Consulta de dados CPF, Placas', 'Suporte prioritário'],
-      price: 78,
-      planId: '' // Inicialmente vazio, será preenchido com o ID correto
-    }
-  ];
+
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
     // Obter os IDs dos planos do Supabase ao carregar o componente
-    this.loadPlanIds();
-  }
-
-  // Carregar os IDs dos planos dinamicamente do Supabase
-  async loadPlanIds() {
-    try {
-      const { data: plansData, error } = await this.authService.getPlans();
-      if (error) {
-        this.showToast('Erro ao buscar planos', 'error');
-        console.error('Erro ao buscar planos:', error);
-        return;
-      }
-
-      if (plansData && plansData.length > 0) {
-        const basicPlan = plansData.find((plan: { name: string }) => plan.name === 'Basic');
-        const goldPlan = plansData.find((plan: { name: string }) => plan.name === 'Gold');
-
-        if (basicPlan && goldPlan) {
-          this.plans[0].planId = basicPlan.id;
-          this.plans[1].planId = goldPlan.id;
-        } else {
-          this.showToast('Planos não encontrados', 'error');
-          console.error('Planos não encontrados');
-        }
-      }
-    } catch (error) {
-      this.showToast('Erro ao carregar os planos', 'error');
-      console.error('Erro ao carregar os planos:', error);
-    }
-  }
-
-  // Função para associar um plano ao usuário
-  async subscribeToPlan(planName: string, name: string) {
-    try {
-      let planId: string | undefined;
-
-      if (name === 'Basic') {
-        const planData = await this.authService.getPlanBasic(planName);
-
-        if (!planData) {
-          this.showToast('Erro ao buscar o ID do plano', 'error');
-          console.error('Erro ao buscar o ID do plano');
-          return;
-        }
-
-        planId = planData.id;
-      } else if (name === 'Gold') {
-        const planData = await this.authService.getPlanGold(planName);
-
-        if (!planData) {
-          console.error('Erro ao buscar o ID do plano');
-          return;
-        }
-
-        planId = planData.id;
-      }
-
-      if (!planId) {
-        this.showToast('Erro: ID do plano não encontrado', 'error');
-        console.error('Erro: ID do plano não encontrado');
-        return;
-      }
-
-      // Obtenha o ID do usuário logado
-      const user = await this.authService.getLoggedInUser();
-
-      if (!user || !user.id) {
-        this.showToast('Erro: Usuário não encontrado', 'error');
-        console.error('Erro: Usuário não encontrado');
-        return;
-      }
-
-      // Agora faça o update do plano do usuário
-      const updateSuccess = await this.authService.updateUserPlan(user.id, planId);
-      if (!updateSuccess) {
-        console.error('Erro ao atualizar o plano do usuário.');
-      } else {
-        this.showToast('Plano do usuário atualizado com sucesso!', 'success');
-        console.log('Plano do usuário atualizado com sucesso!');
-      }
-    } catch (error) {
-      this.showToast('Erro ao inscrever no plano'+ error, 'error');
-      console.error('Erro ao inscrever no plano:', error);
-    }
   }
 
 
