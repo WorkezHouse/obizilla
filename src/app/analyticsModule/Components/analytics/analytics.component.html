@@ -8,41 +8,61 @@
       <div class="header-container">
         <div class="header">
           <h3>Analytics</h3>
-          <p-calendar [(ngModel)]="currentDate" [iconDisplay]="'input'" [showIcon]="true" inputId="templatedisplay">
+          <!--         <p-calendar [(ngModel)]="currentDate" [iconDisplay]="'input'" [showIcon]="true" inputId="templatedisplay">
             <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
               <i class="pi pi-clock pointer-events-none" (click)="clickCallBack($event)"></i>
             </ng-template>
-          </p-calendar>
+          </p-calendar> -->
         </div>
-
 
         <!-- ANALYTICS CARD -->
         <div class="cardHolder">
           <div class="card">
             <div class="analyticsInfoHolder">
               <p>Total em vendas:</p>
-              <h4>R$ 2.400,0</h4>
+              <h4>
+                {{
+                  affiliateData?.data?.total_comission
+                    | currency : "BRL" : "symbol" : "1.2-2"
+                }}
+              </h4>
+              <!-- Format total_commission -->
             </div>
             <div class="analyticsInfoHolder">
               <p>Revenue Share</p>
-              <h4>R$ 1.690,00<span class="monthSpan">/mês</span></h4>
+              <h4>
+                {{
+                  affiliateData?.data?.rev_share
+                    | currency : "BRL" : "symbol" : "1.2-2"
+                }}<span class="monthSpan">/mês</span>
+              </h4>
+              <!-- Format rev_share -->
             </div>
             <div class="analyticsInfoHolder">
               <p>Assinaturas ativas</p>
-              <h4>40</h4>
+              <h4>{{ affiliateData?.data?.total_sales || "0" }}</h4>
+              <!-- Display active subscriptions -->
             </div>
           </div>
         </div>
 
-        <!--  LINKS DE DIVULGAÇÃO-->
-
+        <!-- LINKS DE DIVULGAÇÃO-->
         <section class="shareLinks">
           <h3>Links de Divulgação:</h3>
 
-          <!--PERFECTPAY BUTTON-->
-
-          <button> <img src="../../../../assets/icons/perfectpay.png"> PerfectPay </button>
+          <!-- PERFECTPAY BUTTON -->
+          <button>
+            <img src="../../../../assets/icons/perfectpay.png" /> PerfectPay
+          </button>
         </section>
       </div>
     </div>
   </div>
+  <div id="shareUrlPopup">
+    <div class="spopup">
+      <button class="closeSpopup">X</button>
+      Aqui está seu LINK de divulgacao google.com clique aqui para ser
+      redirecionado para o dashboard da perfectpay!
+    </div>
+  </div>
+</section>

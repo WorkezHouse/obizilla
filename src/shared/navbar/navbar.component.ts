@@ -45,4 +45,9 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   goToRoute(route: string) {
     this.route.navigate([route]);
   }
+
+  goToDash() {
+    this.route.navigate(['/dashboard/settings']);
+
+  }
 }
