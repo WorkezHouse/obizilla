@@ -10,8 +10,15 @@ type User = {
   email: string;
   full_name?: string;
   password: string;
+  plan_id?: string;
 };
-
+type Plan = {
+  id: string;
+  name: string;
+  message_limit: number;
+  price: number;
+  created_at: string;
+};
 // Configuração do Supabase
 const supabaseUrl = 'https://mugpnilbgwfuzhtyizfh.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11Z3BuaWxiZ3dmdXpodHlpemZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM2NTY1MTYsImV4cCI6MjAzOTIzMjUxNn0.4_xLeNZKLXItRQt9vz4JOuxljPUL20AJESehddUZyuE';
@@ -80,7 +87,7 @@ export class AuthService {
     try {
       const { data: user, error } = await supabase
         .from('users')
-        .select('id, email, full_name')
+        .select('id, email, full_name, plan_id', )
         .eq('id', userId)
         .single();
 
@@ -101,7 +108,7 @@ export class AuthService {
     try {
       const { data: users, error } = await supabase
         .from('users')
-        .select('id, email, full_name');
+        .select('id, email, full_name, plan_id');
 
       if (error || !users) {
         console.error('Erro ao buscar todos os usuários:', error);
@@ -188,7 +195,25 @@ export class AuthService {
     const token = btoa(JSON.stringify(payload));
     return token;
   }
+  async getPlanById(planId: string): Promise<Plan | null> {
+    try {
+      const { data: plan, error } = await supabase
+        .from('plans')
+        .select('id, name, price, message_limit, created_at')
+        .eq('id', planId)
+        .single();
 
+      if (error || !plan) {
+        console.error('Erro ao buscar plano por ID:', error);
+        return null;
+      }
+
+      return plan as Plan;
+    } catch (error) {
+      console.error('Erro ao buscar plano por ID:', error);
+      return null;
+    }
+  }
   // Método para decodificar o token
   decodeToken(token: string): { id: string; email: string; exp: number } | null {
     try {

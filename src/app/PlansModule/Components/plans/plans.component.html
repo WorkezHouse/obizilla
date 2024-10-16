@@ -1,24 +1,18 @@
-<section class="wkz-dash">
+<section>
 
   <app-navbar></app-navbar>
-
   <div class="container">
     <div class="sidebar">
       <app-sidebar></app-sidebar>
-
     </div>
-
-
     <div class="container-right">
       <div class="planos">
         <h3 style="font-weight: 600; font-size: 18px; color: white;">Planos</h3>
         <div class="flex-plans">
-
           <div class="container-planos">
             <div class="container-planos-text">
-
               <div class="planos-maininfo">
-                <h2> Basic</h2>
+                <h2>Basic</h2>
                 <p>Tudo o que você precisa para começar com uma IA poderosa e sem censura.</p>
               </div>
               <div class="plans-featbenf">
@@ -40,26 +34,20 @@
               <div class="value-flex">
                 <p>R$ <strong class="size">10</strong></p>
                 <p>mensalmente</p>
-
               </div>
-              <button class="plansSubscribe pSub-white">Assinar</button>
+              <button class="plansSubscribe pSub-white"  *ngIf="userPlan === 'basic'">Plano obtido</button>
 
+              <button class="plansSubscribe pSub-white" *ngIf="userPlan === 'gold'">Contido</button>
             </div>
           </div>
-
-
-
-          <div class="container-planos planoDestaque" >
-            <div class="container-planos-text ">
+          <div class="container-planos planoDestaque">
+            <div class="container-planos-text">
               <div class="planos-maininfo">
-
                 <h2>Gold</h2>
                 <p>Ideal para usuários frequentes que precisam de mais dados e flexibilidade.</p>
               </div>
-
               <div class="plans-featbenf">
                 <p>Tudo do Basic +</p>
-
                 <div class="icon-flex">
                   <img src="../../../../assets/icons/Vector (6).png" alt="">
                   <p>100 prompts / dia</p>
@@ -72,31 +60,25 @@
                   <img src="../../../../assets/icons/Vector (7).png" alt="">
                   <p>Suporte prioritário</p>
                 </div>
-
               </div>
             </div>
             <div class="value">
               <div class="value-flex">
                 <p>R$ <strong class="size">78</strong></p>
                 <p>mensalmente</p>
-
               </div>
-              <button class="plansSubscribe pSub-highlight">Assinar</button>
+              <button class="plansSubscribe pSub-white"  *ngIf="userPlan === 'basic'">Assinar</button>
+              <button class="plansSubscribe pSub-highlight"  *ngIf="userPlan === 'gold'">Plano atual</button>
 
             </div>
           </div>
-
           <div class="container-planos">
             <div class="container-planos-text">
               <div class="planos-maininfo">
-
-                <h2> Affiliate</h2>
+                <h2>Affiliate</h2>
                 <p>Faça dinheiro com nossa IA, se torne um afiliado do Obizilla.</p>
-
               </div>
-
               <div class="plans-featbenf">
-
                 <p>Tudo do Gold +</p>
                 <div class="icon-flex">
                   <img src="../../../../assets/icons/Vector (4).png" alt="">
@@ -114,13 +96,10 @@
             </div>
             <div class="value">
               <button class="plansSubscribe pSub-black">Aplicar</button>
-
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
   </div>
 </section>
