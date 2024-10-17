@@ -221,13 +221,16 @@
 
     background-color: rgba(255, 255, 255, 0.103);
 
-    padding: 20px;
+    padding: 30px 20px;
     border-radius: 10px;
+    display: flex;
     width: 50vw;
-    height: 100px;
     backdrop-filter: blur(100px);
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
       rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+
+    display: flex;
+    flex-direction: column;
 
     .closeSpopup {
       width: 16px;
@@ -248,5 +251,168 @@
       padding: 9px 8px 7px 8px;
       border-radius: 999px;
     }
+
+    h1 {
+      width: 100%;
+      text-align: center;
+    }
+
+    .perfectInfo {
+      margin-top: 12px;
+      display: flex;
+      width: 100%;
+      gap: 12px;
+      justify-content: space-between;
+      .inputHolder {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 4px;
+
+        label {
+          font-size: 14px;
+          span {
+            font-size: 12px;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            color: #2e4bf1;
+          }
+        }
+        input {
+          width: 100%;
+          padding: 8px 10px;
+          background-color: rgba(255, 255, 255, 0.02);
+          outline: none;
+          font-weight: 500;
+          color: white;
+          border: solid 1px #545454;
+          border-radius: 8px;
+        }
+      }
+    }
+
+    .affiliationDetails {
+      margin-top: 16px;
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      gap: 12px;
+
+      .productCard {
+        padding: 15px 20px;
+        max-width: 360px;
+        border-radius: 8px;
+
+        background: radial-gradient(
+            81.08% 139.46% at 47.43% 100%,
+            rgba(57, 74, 163, 0.04) 0%,
+            rgba(0, 255, 240, 0) 100%
+          ),
+          linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.01) 0%,
+            rgba(255, 255, 255, 0.01) 100%
+          ),
+          var(--black-0, #000);
+
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        h2 {
+          font-size: 16px;
+          font-weight: 600;
+        }
+
+        .pickurl {
+          margin-top: 8px;
+          width: 100%;
+          justify-content: center;
+          align-items: center;
+          display: flex;
+          font-weight: 500;
+
+          p {
+            white-space: nowrap;
+            color: #bbbbbb;
+            overflow: hidden;
+            width: 100%;
+            text-overflow: ellipsis;
+            font-size: 14px;
+          }
+          button {
+            background-color: transparent;
+            outline: none;
+            border: none;
+            width: fit-content;
+            height: fit-content;
+            padding: 0px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+              width: 18px;
+              height: 18px;
+              object-fit: cover;
+            }
+          }
+        }
+        .comission {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          margin-top: 18px;
+          h1 {
+            font-size: 16px;
+            font-weight: 500;
+          }
+
+          .value {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            h2 {
+              font-size: 40px;
+              font-weight: 700;
+              display: flex;
+              gap: 4px;
+
+              .valueCurrency {
+                position: relative;
+                font-size: 14px;
+                top: 10px;
+              }
+              .duration {
+                font-weight: 400;
+                font-size: 14px;
+                position: relative;
+                top: 20px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1530px) {
+  .affiliationDetails {
+    display: flex;
+    flex-direction: column;
+
+    .productCard {
+      width: 100% !important;
+      max-width: unset !important;
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .spopup {
+    width: 80vw !important;
   }
 }

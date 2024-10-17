@@ -122,7 +122,7 @@ export class AuthService {
     }
   }
   // Método de registro (signUp)
-  async signUp(email: string, password: string, fullName?: string, planName?: string): Promise<{ message: string } | null> {
+  async signUp(email: string, password: string, fullName: string, planName?: string): Promise<{ message: string } | null> {
     try {
       const { data: existingUser, error: userError } = await supabase
         .from('users')
@@ -155,7 +155,7 @@ export class AuthService {
 
       const { data: newUser, error: insertError } = await supabase
         .from('users')
-        .insert([{ id: uuidv4(), email, password: hashedPassword, plan_id: planId }])
+        .insert([{ id: uuidv4(), email, password: hashedPassword,full_name: fullName ,plan_id: planId }])
         .single();
 
       if (insertError) {

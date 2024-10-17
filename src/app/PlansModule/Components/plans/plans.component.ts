@@ -32,7 +32,6 @@ export class PlansComponent implements OnInit {
           this.planID = userData.plan_id ?? ''; // Armazenar o plan_id do usuário
           console.log('User ID:', this.userID);
           console.log('Plan ID:', this.planID);
-
           // Buscar os dados do plano usando o plan_id
           const planData = await this.auth.getPlanById(this.planID);
           console.log('Plan data:', planData);
