@@ -28,7 +28,7 @@ export class LoginFormularioComponent implements OnInit {
       this.showToast('Login bem-sucedido!', 'success');
       setTimeout(() => {
         this.router.navigate(['/chat']);
-      }, 1000); // 5 segundos
+      }, 500); // 5 segundos
     } else {
       console.error('Erro no login.');
       this.showToast('Erro no login.', 'error');

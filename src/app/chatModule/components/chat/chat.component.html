@@ -10,13 +10,11 @@
       <div class="text">{{ message.text }}</div>
     </div>
 
-    <!-- Área de entrada de mensagem -->
     <div class="chat-input">
       <input type="text" id="userInput" placeholder="Digite sua mensagem..." (keydown.enter)="sendMessage()" [disabled]="!canSendMessage()" />
       <button id="sendButton" (click)="sendMessage()" [disabled]="!canSendMessage()">Enviar</button> <!-- Adicionei o ID -->
     </div>
 
-    <!-- Mensagem informativa -->
     <p *ngIf="!canSendMessage()">Você atingiu o limite de mensagens para hoje.</p>
   </div>
 
