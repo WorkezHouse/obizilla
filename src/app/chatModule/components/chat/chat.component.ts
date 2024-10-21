@@ -11,190 +11,199 @@ import { AuthService } from '../../../../shared/Service/auth.service';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  messages: { sender: string, text: string }[] = [];
   userQuestions: string[] = [];
   aiResponses: string[] = [];
-  canSendMessageFlag = true; // Renomeado para evitar conflito
-  showWelcomeMessage = true;
-  userPlanLimit: number = 0;
-  messagesSentToday: number = 0;
-  userID: string = ''; // Inicializar como string vazia
-  planID: string = '';
+  canSendMessage: boolean = true; // Controla se o envio de mensagem é permitido
+  shouldScroll: boolean = true; // Controla se o chat deve rolar automaticamente para o fim
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private auth: AuthService) {}
 
-  async ngOnInit() {
-    this.setUserIDFromToken();
-    if (this.userID) {
-      try {
-        const userData = await this.auth.getUserById(this.userID);
-        console.log('User data:', userData);
-        if (userData) {
-          this.userID = userData.id;
-          this.planID = userData.plan_id ?? ''; // Armazenar o plan_id do usuário
-          console.log('User ID:', this.userID);
-          console.log('Plan ID:', this.planID);
+  ngOnInit(): void {}
 
-          // Buscar os dados do plano usando o plan_id
-          const planData = await this.auth.getPlanById(this.planID);
-          console.log('Plan data:', planData);
-          if (planData) {
-            this.userPlanLimit = planData.message_limit;
-            console.log('User Plan Limit:', this.userPlanLimit);
-
-            // Carregar o número de mensagens enviadas hoje do localStorage
-            this.loadMessagesSentToday();
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user or plan data:', error);
-      }
-    }
+  // Método para verificar se o chat está no final
+  onChatScroll(event: any) {
+    const chatArea = event.target;
+    const isAtBottom = Math.abs(chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight) < 10;
+    this.shouldScroll = isAtBottom;
   }
 
-  setUserIDFromToken(): void {
-    const token = localStorage.getItem('authToken');
-    console.log('Token:', token);
-    if (token) {
-      const decodedToken = this.auth.decodeToken(token);
-      console.log('Decoded token:', decodedToken);
-      if (decodedToken && decodedToken.id) {
-        this.userID = decodedToken.id;
-      }
-    }
-  }
-
-  canSendMessage(): boolean {
-    return this.messagesSentToday < this.userPlanLimit;
-  }
-
-  loadMessagesSentToday(): void {
-    const today = new Date().toISOString().split('T')[0]; // Obter a data de hoje no formato YYYY-MM-DD
-    const storedData = localStorage.getItem(`messagesSent_${this.userID}_${today}`);
-    this.messagesSentToday = storedData ? parseInt(storedData, 10) : 0;
-    console.log('Messages sent today:', this.messagesSentToday);
-  }
-
-  get hasBotMessages(): boolean {
-    return this.messages.some(message => message.sender === 'bot');
-  }
-
+  // Adiciona event listener para o Enter, diretamente no template agora
   onEnter(event: KeyboardEvent) {
-    if (event.key === 'Enter' && this.canSendMessage() && !event.shiftKey) {
-      event.preventDefault();
-      this.sendMessage();
+    if (event.key === 'Enter' && this.canSendMessage && !event.shiftKey) {
+      event.preventDefault();  // Previne a quebra de linha
+      const sendButton = document.getElementById('sendButton') as HTMLElement;
+      sendButton.click(); // Simula o clique no botão de envio
     }
   }
 
+  // Método para enviar a mensagem
   sendMessage() {
-    console.log('sendMessage called');
-
-    // Acessando o input de texto corretamente
     const inputElement = document.getElementById('userInput') as HTMLTextAreaElement;
+    const sendButton = document.getElementById('sendButton') as HTMLElement;
     const messageText = inputElement.value.trim();
 
-    if (!messageText) return;
-
-    console.log('User message:', messageText);
+    if (!messageText || !this.canSendMessage) return;
 
     // Desabilita o envio de novas mensagens
-    this.canSendMessageFlag = false;
-    const sendButton = document.getElementById('sendButton') as HTMLElement;
+    this.canSendMessage = false;
     sendButton.style.opacity = '0.5'; // Opacidade reduzida
 
-    // Limpa o input e a mensagem de boas-vindas
+    // Limpa o input e esconde a mensagem de boas-vindas
     inputElement.value = '';
-    this.showWelcomeMessage = false;
+    const messageBox = document.getElementById('messageBox');
+    const chatArea = document.getElementById('chatArea');
+
+    if (messageBox) {
+      messageBox.style.display = 'none';
+      chatArea!.style.display = 'flex';
+    }
 
     // Exibe a mensagem do usuário no chat
-    this.messages.push({ text: messageText, sender: 'user' });
-
-    // Adiciona a pergunta do usuário no array de perguntas
     this.userQuestions.push(messageText);
+    this.appendMessage('user', messageText);
 
-    // Exibe o loader (sem adicionar como uma mensagem de texto)
-    this.canSendMessageFlag = false;
+    // Exibe o loader
+    this.appendLoading();
 
-    console.log('Sending data to webhook:', {
-      userQuestions: this.userQuestions,
-      aiResponses: this.aiResponses
-    });
-
-    // Envia a mensagem e os arrays de perguntas e respostas para o webhook do n8n
+    // Envia a mensagem e os arrays de perguntas e respostas para o webhook
     fetch('https://webhook.workez.online/webhook/fe8ee5ca-1a13-449f-bc2c-54fca1795da6', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userQuestions: this.userQuestions, // Envia as perguntas do usuário
-        aiResponses: this.aiResponses      // Envia as respostas da IA
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userQuestions: this.userQuestions, aiResponses: this.aiResponses })
     })
-    .then(response => {
-      console.log('Webhook response:', response);
-      return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-      console.log('Webhook data:', data);
+      this.removeLoading();
 
-      // Remove o loading
-      this.messages.pop();
-
-      let botText;
-      if (data.choices && data.choices[0] && data.choices[0].text) {
-        botText = data.choices[0].text;
-      } else if (data.message && data.message.content) {
-        botText = data.message.content;
-      } else {
-        botText = "Texto não disponível"; // Caso nenhum formato esteja presente
-      }
-
-      console.log('Bot response:', botText);
-
-      // Adiciona a resposta da IA no array de respostas
+      let botText = this.getBotResponseText(data);
       this.aiResponses.push(botText);
-
-      // Exibe a resposta do bot no chat
-      this.messages.push({ text: botText, sender: 'bot' });
-
-      // Força a atualização da view para garantir que a mensagem apareça
-      this.changeDetectorRef.detectChanges();  // Corrigido aqui!
-
-      // Incrementa o contador de mensagens enviadas
-      this.messagesSentToday++;
-      this.saveMessagesSentToday();
+      this.appendMessage('bot', botText);
 
       // Reativa o envio de mensagens após a resposta
-      this.canSendMessageFlag = true;
+      this.canSendMessage = true;
       sendButton.style.opacity = '1'; // Opacidade normal
 
-      this.scrollToBottom();
+      // Garante que o chat seja rolado para o final após a resposta
+      this.scrollToBottom(chatArea);  // Adiciona o scroll para o final
     })
     .catch(error => {
       console.error('Erro:', error);
-      this.messages.pop();
-
-      // Exibe uma mensagem de erro
-      this.messages.push({ text: 'Ocorreu um erro. Tente novamente.', sender: 'bot' });
-
-      // Reativa o envio de mensagens em caso de erro
-      this.canSendMessageFlag = true;
+      this.removeLoading();
+      this.appendMessage('bot', 'Ocorreu um erro. Tente novamente.');
+      this.canSendMessage = true;
       sendButton.style.opacity = '1'; // Opacidade normal
 
-      this.scrollToBottom();
+      // Rolagem para o final, mesmo em caso de erro
+      this.scrollToBottom(chatArea);
     });
   }
 
-  saveMessagesSentToday(): void {
-    const today = new Date().toISOString().split('T')[0]; // Obter a data de hoje no formato YYYY-MM-DD
-    localStorage.setItem(`messagesSent_${this.userID}_${today}`, this.messagesSentToday.toString());
+  // Método para exibir mensagem no chat
+  appendMessage(sender: 'user' | 'bot', text: string) {
+    const chatArea = document.getElementById('chatArea');
+    let messageDiv = document.createElement('div');
+
+    // Verifica se o remetente é o usuário ou o bot
+    if (sender === 'user') {
+      // Mensagem do usuário dentro do chatArea
+      messageDiv.classList.add('user-message');
+      messageDiv.innerHTML = `
+        <i class="pi pi-user icon" style="font-size: 24px; color: white; padding: 10px;"></i>
+        <div class="text" style="
+          background-color: #252525;
+          color: white;
+          padding: 10px;
+          border-radius: 8px;
+          max-width: 70%;
+          word-wrap: break-word;
+          white-space: pre-wrap;
+          display: inline-block;
+        ">${text}</div>
+      `;
+      chatArea?.appendChild(messageDiv); // Adiciona a mensagem do usuário dentro do chatArea
+    } else {
+      // Mensagem do bot dentro do chatArea
+      messageDiv.classList.add('bot-message');
+      messageDiv.style.cssText = `
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        border: 1px solid #394AA3;
+        padding: 20px 20px 20px 30px;
+        border-radius: 21px 21px 0 0;
+        border-bottom: none;
+        justify-content: flex-start;
+      `;
+      messageDiv.innerHTML = `
+        <img src="../../../../assets/icons/obizilla favicon 1.png" alt="Mascote" class="mascote">
+        <div class="text">
+          ${text}
+        </div>
+      `;
+      chatArea?.appendChild(messageDiv); // Adiciona a mensagem do bot dentro do chatArea
+    }
+
+    // Garante que o chat seja rolado para o final após adicionar a nova mensagem
+    this.scrollToBottom(chatArea);
   }
 
-  scrollToBottom() {
-    const chatMessagesElement = document.getElementById('chat-messages');
-    if (chatMessagesElement) {
-      chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+ // Adiciona um loader com imagem e três pontinhos pulando
+appendLoading() {
+  const chatArea = document.getElementById('chatArea');
+  const loadingDiv = document.createElement('div');
+  loadingDiv.classList.add('bot-response'); // Adiciona a classe do bot response
+
+  loadingDiv.style.cssText = `
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    border: 1px solid #394AA3;
+    padding: 20px 20px 20px 30px;
+    border-radius: 21px 21px 0 0;
+    border-bottom: none;
+    justify-content: flex-start;
+  `;
+
+  loadingDiv.innerHTML = `
+    <img src="../../../../assets/icons/obizilla favicon 1.png" alt="Mascote" class="mascote">
+    <div class="loading">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  `;
+
+  chatArea?.appendChild(loadingDiv);
+  this.scrollToBottom(chatArea);
+}
+
+  // Remove o loader
+  removeLoading() {
+    const chatArea = document.getElementById('chatArea');
+    const loadingDiv = chatArea?.querySelector('.bot-response');
+    if (loadingDiv) chatArea?.removeChild(loadingDiv);
+  }
+
+  // Método para pegar a resposta do bot
+  getBotResponseText(data: any): string {
+    if (data.choices && data.choices[0]?.message?.content) {
+      return data.choices[0].message.content;
+    } else if (data.message?.content) {
+      return data.message.content;
+    } else {
+      return "Texto não disponível";
     }
   }
+
+  // Função para rolar a área de chat até o final
+  // Função para rolar a área de chat até o final com scroll suave
+scrollToBottom(chatArea: HTMLElement | null) {
+  setTimeout(() => {
+    if (chatArea) {
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+  }, 100); // Atraso de 100ms para garantir que a mensagem tenha sido renderizada
+}
 }

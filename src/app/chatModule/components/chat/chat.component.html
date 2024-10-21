@@ -1,21 +1,23 @@
 <app-navbar></app-navbar>
-
-<div class="container-main">
-
-  <div class="chat-container">
-    <img src="../../../../assets/icons/obizilla favicon 1.png" alt="Mascote" class="mascote" style="width: 50px; height: 50px;">
-
-    <div *ngFor="let message of messages" [ngClass]="{'user-message': message.sender === 'user', 'bot-response': message.sender === 'bot'}" class="message">
-      <i *ngIf="message.sender === 'user'" class="pi pi-user icon"></i>
-      <div class="text">{{ message.text }}</div>
-    </div>
-
-    <div class="chat-input">
-      <input type="text" id="userInput" placeholder="Digite sua mensagem..." (keydown.enter)="sendMessage()" [disabled]="!canSendMessage()" />
-      <button id="sendButton" (click)="sendMessage()" [disabled]="!canSendMessage()">Enviar</button> <!-- Adicionei o ID -->
-    </div>
-
-    <p *ngIf="!canSendMessage()">Você atingiu o limite de mensagens para hoje.</p>
+<div class="container">
+  <!-- Mensagem de boas-vindas -->
+  <div id="messageBox" class="message-box">
+    <img src="../../../../assets/icons/obizilla favicon 1.png" alt="Mascote" class="mascote">
+    <p class="message">Olá! Como posso te ajudar hoje?</p>
   </div>
 
+  <!-- Área do chat -->
+  <div id="chatArea" class="chat-area" (scroll)="onChatScroll($event)"></div>
 </div>
+
+<!-- Área de input fixo ao final -->
+<div class="input-wrapper">
+  <div class="input-container">
+    <textarea id="userInput" placeholder="Digite aqui..." rows="1" (keydown)="onEnter($event)"></textarea>
+
+    <!-- Ícone de envio usando uma imagem -->
+    <img class="imgs" id="sendButton" src="../../../../assets/icons/pra-cima (2).png" (click)="sendMessage()" style="font-size: 2rem; cursor: pointer;" alt="">
+  </div>
+</div>
+
+
